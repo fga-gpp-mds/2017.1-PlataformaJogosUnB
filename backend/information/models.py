@@ -22,20 +22,24 @@ MAX_SEMESTER_VALUE = 2
 
 class Award(models.Model):
 
+    class Meta:
+        verbose_name = _('award')
+        verbose_name_plural = _('awards')
+
     name = models.CharField(
-        _('Nome do prêmio'),
+        _('Award name'),
         max_length=30,
         choices=AWARDS_CHOICES,
         default=AWARDS_CHOICES[0][0],
-        help_text=_('Ex: Melhor Jogo.')
+        help_text=_('e.g: Best game')
     )
 
     place = models.CharField(
-        _('Colocação'),
+        _('Placing'),
         max_length=30,
         choices=PLACE_AWARDS_CHOICES,
         default=PLACE_AWARDS_CHOICES[0][0],
-        help_text=_('Colocação que o jogo ganhou.')
+        help_text=_('Placing of the game.')
     )
 
     def save(self, *args, **kwargs):
@@ -48,24 +52,28 @@ class Award(models.Model):
 
 class Credit(models.Model):
 
+    class Meta:
+        verbose_name = _('credit')
+        verbose_name_plural = _('credits')
+
     ROLE_CHOICES = [
-        ('desenvolvedor', _('Desenvolvedor')),
+        ('desenvolvedor', _('Developer')),
         ('design', _('Design')),
-        ('musico', _('Músico')),
+        ('musico', _('Musician')),
     ]
 
     specialty = models.CharField(
-        _('Especialidade'),
+        _('Specialization'),
         max_length=14,
         choices=ROLE_CHOICES,
         default=ROLE_CHOICES[0][0],
-        help_text=_('Seleciona o tipo do contribuidor do projeto.'),
+        help_text=_('Select the type of project contributor.'),
     )
 
     name = models.CharField(
-        _('Nome'),
+        _('Name'),
         max_length=100,
-        help_text=_('Nome do contribuidor.')
+        help_text=_('Collaborator\'s name.')
     )
 
     email = models.EmailField(
@@ -74,39 +82,39 @@ class Credit(models.Model):
         max_length=100,
         null=True,
         blank=True,
-        help_text=_('E-mail do contribuidor.')
+        help_text=_('Collaborator\'s e-mail.')
     )
 
     github_page = models.URLField(
-        _('Página do Github'),
+        _('Github page'),
         null=True,
         blank=True,
         validators=[URLValidator()],
-        help_text=_('Github do contribuidor.')
+        help_text=_('Collaborator\'s Github page.')
     )
 
     behance_page = models.URLField(
-        _('Página do Behance'),
+        _('Behance page'),
         null=True,
         blank=True,
         validators=[URLValidator()],
-        help_text=_('Behance do contribuidor.')
+        help_text=_('Collaborator\'s Behance page.')
     )
 
     soundCloud_page = models.URLField(
-        _('Página do SoundCloud'),
+        _('SoundCloud page'),
         null=True,
         blank=True,
         validators=[URLValidator()],
-        help_text=_('SoundCloud do contribuidor.')
+        help_text=_('Collaborator\'s SoundCloud page.')
     )
 
     personal_page = models.URLField(
-        _('Página Pessoal'),
+        _('Profile'),
         null=True,
         blank=True,
         validators=[URLValidator()],
-        help_text=_('Alguma página que contenha o currículo do contribuidor.')
+        help_text=_('Some page with the collaborator\'s curriculum.')
     )
 
     def save(self, *args, **kwargs):
@@ -118,6 +126,10 @@ class Credit(models.Model):
 
 
 class Genre(models.Model):
+
+    class Meta:
+        verbose_name = _('genre')
+        verbose_name_plural = _('genres')
 
     name = models.CharField(
         _('Name'),
@@ -144,6 +156,11 @@ class Genre(models.Model):
 
 class Rating(models.Model):
 
+    class Meta:
+        unique_together = ("user_voter", "information")
+        verbose_name = _('rating')
+        verbose_name_plural = _('ratings')
+
     vote = models.BooleanField(
         _('Like or dislike some game.'),
         help_text=_('Votes of the game.')
@@ -158,6 +175,7 @@ class Rating(models.Model):
     information = models.ForeignKey(
         'Information',
         on_delete=models.CASCADE,
+        verbose_name=_('information')
     )
 
     def save(self, *args, **kwargs):
@@ -167,11 +185,12 @@ class Rating(models.Model):
     def __str__(self):
         return "{0}: {1}".format(self.user_voter, self.vote)
 
-    class Meta:
-        unique_together = ("user_voter", "information")
-
 
 class Information(models.Model):
+
+    class Meta:
+        verbose_name = _('information')
+        verbose_name_plural = _('informations')
 
     description = models.TextField(
         _('Description'),
@@ -204,22 +223,27 @@ class Information(models.Model):
         Game,
         on_delete=models.CASCADE,
         primary_key=True,
+        verbose_name=_('game')
     )
 
     credits = models.ManyToManyField(
         Credit,
-        related_name='credits'
+        related_name='credits',
+        verbose_name=_('credits')
     )
 
     genres = models.ManyToManyField(
         Genre,
-        related_name='genres'
+        related_name='genres',
+        verbose_name=_('genres')
+
     )
 
     awards = models.ManyToManyField(
         Award,
         related_name='awards',
-        blank=True
+        blank=True,
+        verbose_name=_('awards')
     )
 
     def save(self, *args, **kwargs):

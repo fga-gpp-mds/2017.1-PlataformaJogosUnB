@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 import pytest
 from game.factory import GameFactory
 from core.helper_test import (
@@ -43,8 +44,8 @@ class TestInformationCreation:
 
 
 class TestInformationValidation:
-    error_message_min_value = "A game description must have at least 50 \
-characters!"
+    error_message_min_value = _("A game description must have at least 50 \
+characters!")
     error_message_year_future = 'We believe the game was not won ' \
         'in the future!'
 
@@ -90,9 +91,9 @@ class TestAward:
     @staticmethod
     def parametrized_str(attribute, text):
 
-        error_message_max_length = "Valor "\
-                "'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'" \
-                " não é uma opção válida."
+        error_message_max_length = "O valor "\
+            "'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'" \
+            " não é uma escolha válida."
 
         return [
             ('', text,
@@ -150,12 +151,12 @@ class TestGenre:
 
 class TestGenreValidation:
 
-    error_message_min_value = 'A genre description must have \
-at least 20 characters!'
+    error_message_min_value = _('A genre description must have'
+                                ' at least 20 characters!')
     short_description = "short description"
 
-    error_message_max_length = 'Certifique-se de que o valor tenha no '\
-        'máximo 100 caracteres (ele possui 101).'
+    error_message_max_length = 'Garanta que este valor tenha no '\
+        'máximo 100 caracteres (tem 101).'
 
     @pytest.mark.django_db
     @pytest.mark.parametrize("description, errors_dict", [
@@ -190,8 +191,8 @@ def credit_creation():
 
 class TestCreditValidation:
 
-    error_message_max_length = 'Certifique-se de que o valor tenha no '\
-        'máximo 100 caracteres (ele possui 101).'
+    error_message_max_length = 'Garanta que este valor tenha no '\
+        'máximo 100 caracteres (tem 101).'
 
     @pytest.mark.django_db
     @pytest.mark.parametrize("name, errors_dict", [
